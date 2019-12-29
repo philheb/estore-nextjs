@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
       <style jsx global>
         {`
           body {
-            font-family: "Avenir next", Avenir, "Segoe UI", Roboto,
+            font-family: "Raleway", "Avenir next", Avenir, "Segoe UI", Roboto,
               "Helvetica Neue", Arial, "Noto Sans", sans-serif,
               "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
               "Noto Color Emoji";

@@ -18,7 +18,7 @@ const SigninCmp = () => {
   const { email, password, error, loading, message, showForm } = values;
 
   useEffect(() => {
-    isAuth() && Router.push("/blogs");
+    isAuth() && Router.push("/dashboard");
   }, []);
 
   const submitHandler = e => {
