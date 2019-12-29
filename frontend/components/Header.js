@@ -20,7 +20,7 @@ import {
   NavbarText
 } from "reactstrap";
 
-import Search from "./blog/Search";
+// import Search from "./blog/Search";
 
 Router.onRouteChangeStart = url => NProgress.start();
 Router.onRouteChangeComplete = url => NProgress.done();
@@ -29,13 +29,7 @@ Router.onRouteChangeError = url => NProgress.done();
 const Header = props => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [search, setSearch] = useState(false);
-
   const toggle = () => setIsOpen(!isOpen);
-
-  const toggleSearch = () => {
-    setSearch(!search);
-  };
 
   return (
     <div>
@@ -51,58 +45,10 @@ const Header = props => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='ml-auto nav-align' navbar>
-            <>
-              {search ? (
-                <div className='row mr-4 ml-1 align-items-center'>
-                  <Search />
-                  <NavItem onClick={toggleSearch} className='ml-2'>
-                    <NavLink
-                      style={{
-                        fontFamily: "Avenir, Arial, FontAwesome",
-                        cursor: "pointer"
-                      }}
-                    >
-                      &#xF002;
-                    </NavLink>
-                  </NavItem>
-                </div>
-              ) : (
-                <div>
-                  <NavItem onClick={toggleSearch}>
-                    <NavLink
-                      className='row mr-4 ml-1'
-                      style={{
-                        fontFamily: "Avenir, Arial, FontAwesome",
-                        cursor: "pointer"
-                      }}
-                    >
-                      &#xF002;
-                    </NavLink>
-                  </NavItem>
-                </div>
-              )}
-
-              {/* <NavItem>
-                <a
-                  href='/user/crud/blog'
-                  className='btn btn-primary text-light'
-                >
-                  New Post
-                </a>
-              </NavItem> */}
-
-              <NavItem>
-                <Link href='/blogs'>
-                  <NavLink className='mr-4' style={{ cursor: "pointer" }}>
-                    Blog
-                  </NavLink>
-                </Link>
-              </NavItem>
-            </>
             {!isAuth() && (
               <>
                 <NavItem>
-                  <Link href='/signin'>
+                  <Link href='/auth/signin'>
                     <NavLink
                       className='mr-4'
                       style={{ cursor: "pointer" }}
@@ -113,7 +59,7 @@ const Header = props => {
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <Link href='/signup'>
+                  <Link href='/auth/signup'>
                     <NavLink className='mr-4' style={{ cursor: "pointer" }}>
                       Sign Up
                     </NavLink>
@@ -121,77 +67,22 @@ const Header = props => {
                 </NavItem>
               </>
             )}
-
             {isAuth() && (
               <>
-                <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle nav>
-                    <img
-                      src={isAuth().imageUrl}
-                      className='rounded-circle shadow'
-                      alt='user-avatar'
-                      style={{ height: "40px" }}
-                    />
-                  </DropdownToggle>
-
-                  <DropdownMenu right>
-                    <Link href={`/profile/${isAuth().username}`}>
-                      <DropdownItem className='font-weight-bold'>
-                        {isAuth() && isAuth().name}
-                      </DropdownItem>
-                    </Link>
-                    <a href='/user/crud/blog'>
-                      <DropdownItem>New Post</DropdownItem>
-                    </a>
-
-                    <a
-                      href={
-                        isAuth() && isAuth().role === 1
-                          ? "/admin/crud/blogs"
-                          : "/user/crud/blogs"
-                      }
-                    >
-                      <DropdownItem>Posts</DropdownItem>
-                    </a>
-
-                    <DropdownItem divider />
-
-                    <Link href={`/profile/${isAuth().username}`}>
-                      <DropdownItem>Profile</DropdownItem>
-                    </Link>
-                    <Link
-                      href={
-                        isAuth() && isAuth().role === 1 ? "/admin" : "/user"
-                      }
-                    >
-                      <DropdownItem>Setting</DropdownItem>
-                    </Link>
-
-                    <DropdownItem divider />
-                    <Link href='/contact'>
-                      <DropdownItem>Contact Us</DropdownItem>
-                    </Link>
-                    <DropdownItem
-                      onClick={() => signout(() => Router.replace("/"))}
-                    >
-                      Sign Out
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                <NavItem>
+                  <NavLink
+                    onClick={() => signout(() => Router.replace("/"))}
+                    className='mr-4'
+                    style={{ cursor: "pointer" }}
+                  >
+                    Sign Out
+                  </NavLink>
+                </NavItem>
               </>
             )}
           </Nav>
         </Collapse>
       </Navbar>
-      <style jsx global>
-        {`
-          @media (min-width: 768px) {
-            .nav-align {
-              align-items: center;
-            }
-          }
-        `}
-      </style>
     </div>
   );
 };

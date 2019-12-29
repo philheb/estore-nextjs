@@ -38,7 +38,7 @@ exports.register = (req, res) => {
         <p style="color:black">
           Please click on the following link to activate your account:
         </p>
-        <p>${process.env.CLIENT_URL}/auth/account/activate/${token}</p>
+        <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
         <hr />
         <p style="color:#888">This email may contain sensitive information</p>
         <p style="color:#888">https://seoblog.com</p>
