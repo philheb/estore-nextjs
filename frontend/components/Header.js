@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { useRouter } from "next/router";
@@ -29,37 +29,37 @@ Router.onRouteChangeError = url => NProgress.done();
 
 const Header = props => {
   const [isOpen, setIsOpen] = useState(false);
+  const [auth, setAuth] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
   const path = useRouter().pathname;
 
+  useEffect(() => {
+    setAuth(isAuth() ? true : false);
+  }, []);
+
   return (
     <div>
       <Navbar color='light' light expand='md'>
-        <Link href='/'>
-          <NavbarBrand
-            style={{ cursor: "pointer" }}
-            // className='font-weight-bold'
-          >
-            {APP_NAME}
-          </NavbarBrand>
+        <Link href='/' passHref>
+          <NavLink style={{ cursor: "pointer" }}>{APP_NAME}</NavLink>
         </Link>
+
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='ml-auto nav-align' navbar>
-            {!isAuth() && (
+            {!auth && (
               <>
                 <NavItem>
-                  <Link href='/auth/signin'>
+                  <Link href='/auth/signin' passHref>
                     <NavLink
-                      className='mr-4 link'
+                      className='mr-4 '
                       style={
                         path === "/auth/signin"
                           ? { color: "black", cursor: "pointer" }
                           : { cursor: "pointer" }
                       }
-                      // className='btn btn-outline-danger text-danger mr-2'
                     >
                       <IoMdLogIn className='mr-1' />
                       Log In
@@ -67,9 +67,9 @@ const Header = props => {
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <Link href='/auth/signup'>
+                  <Link href='/auth/signup' passHref>
                     <NavLink
-                      className='mr-4 link'
+                      className='mr-4 '
                       style={
                         path === "/auth/signup"
                           ? { color: "black", cursor: "pointer" }
@@ -83,14 +83,14 @@ const Header = props => {
                 </NavItem>
               </>
             )}
-            {isAuth() && (
+            {auth && (
               <>
                 <NavItem>
-                  <Link href='/dashboard'>
+                  <Link href='/dashboard' passHref>
                     <NavLink
-                      className='mr-4 link'
+                      className='mr-4 '
                       style={
-                        path === "/auth/signup"
+                        path === "/dashboard"
                           ? { color: "black", cursor: "pointer" }
                           : { cursor: "pointer" }
                       }
