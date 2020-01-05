@@ -1,47 +1,63 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { getProducts } from "../actions/product";
+import ProductCard from "../components/product/ProductCard";
 
 const Index = () => {
-  const [loadedProducts, setLoadedProducts] = useState([]);
+  const [productsBySold, setProductsBySold] = useState([]);
+  const [productsByArrival, setProductsByArrival] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    loadProducts();
+    loadProductsByArrival();
+    loadProductsBySold();
   }, []);
 
-  const loadProducts = () => {
+  const loadProductsBySold = () => {
     setIsLoading(true);
     getProducts("sold").then(data => {
       if (data.error) {
         setError(data.error);
       } else {
-        setLoadedProducts(data);
+        setProductsBySold(data);
       }
       setIsLoading(false);
     });
   };
 
-  const showProducts = () => {
-    return loadedProducts.map((product, index) => {
-      return (
-        <article key={index}>
-          <p>{product.title}</p>
-          <img
-            src={product.imageUrl}
-            alt={product.title + " image"}
-            style={{ width: 300, height: 300, objectFit: "cover" }}
-          />
-        </article>
-      );
+  const loadProductsByArrival = () => {
+    setIsLoading(true);
+    getProducts("createdAt").then(data => {
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setProductsByArrival(data);
+      }
+      setIsLoading(false);
+    });
+  };
+
+  const showProductsByArrival = () => {
+    return productsByArrival.map((product, index) => {
+      return <ProductCard key={index} product={product} />;
+    });
+  };
+
+  const showProductsBySold = () => {
+    return productsBySold.map((product, index) => {
+      return <ProductCard key={index} product={product} />;
     });
   };
 
   return (
     <Layout>
-      <h2 className='display-4'>Index Page</h2>
-      {showProducts()}
+      <main className='container'>
+        <h2 className='display-4'>Index Page</h2>
+        <section>
+          <article className='row'>{showProductsBySold()}</article>
+        </section>
+      </main>
     </Layout>
   );
 };

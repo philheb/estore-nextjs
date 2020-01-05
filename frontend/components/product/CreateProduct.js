@@ -3,7 +3,7 @@ import { getCookie } from "../../actions/auth";
 import { createProduct } from "../../actions/product";
 import { getCategories } from "../../actions/category";
 
-const Product = () => {
+const CreateProduct = () => {
   const [values, setValues] = useState({
     title: "",
     description: "",
@@ -289,4 +289,4 @@ const Product = () => {
   return <div>{newProductForm()}</div>;
 };
 
-export default Product;
+export default CreateProduct;
