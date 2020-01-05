@@ -53,12 +53,14 @@ exports.remove = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  Category.find({}).exec((err, categories) => {
-    if (err) {
-      return res.status(400).json({
-        error: errorHandler(err)
-      });
-    }
-    res.json(categories);
-  });
+  Category.find({})
+    .sort({ slug: 1 })
+    .exec((err, categories) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err)
+        });
+      }
+      res.json(categories);
+    });
 };

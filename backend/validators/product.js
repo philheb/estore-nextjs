@@ -4,21 +4,29 @@ exports.productValidator = [
   check("title")
     .not()
     .isEmpty()
-    .withMessage("The name is required"),
+    .withMessage("The title is required."),
   check("description")
     .not()
     .isEmpty()
-    .withMessage("The description is required"),
+    .withMessage("The description is required."),
   check("price")
     .not()
     .isEmpty()
-    .withMessage("The price is required"),
+    .withMessage("The price is required."),
   check("quantity")
     .not()
     .isEmpty()
-    .withMessage("The quantity is required"),
+    .withMessage("The quantity is required."),
   check("imageUrl")
     .not()
     .isEmpty()
-    .withMessage("The image is required")
+    .withMessage("The image is required."),
+  check("category")
+    .not()
+    .isEmpty()
+    .withMessage("The category is required."),
+  check("shipping")
+    .not()
+    .isEmpty()
+    .withMessage("Please select if you are offering the shipping or not.")
 ];

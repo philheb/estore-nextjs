@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import { getCookie } from "../../actions/auth";
 import { createProduct } from "../../actions/product";
+import { getCategories } from "../../actions/category";
 
 const Product = () => {
   const [values, setValues] = useState({
     title: "",
     description: "",
     price: "",
-    imageUrl:
-      "https://res.cloudinary.com/seoblog/image/upload/v1577972957/ecommerce/products/default_egwjnk.jpg",
+    imageUrl: "",
     category: "",
     quantity: "",
     shipping: "",
     isLoading: false,
     loadingPicture: false,
     error: "",
-    success: ""
+    success: "",
+    createdProduct: ""
   });
   const [loadedCategories, setLoadedCategories] = useState([]);
 
@@ -30,11 +31,30 @@ const Product = () => {
     isLoading,
     error,
     success,
-    createProduct,
     loadingPicture
   } = values;
 
   const token = getCookie("token");
+
+  useEffect(() => {
+    getCategories().then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setLoadedCategories(data);
+      }
+    });
+  }, []);
+
+  const mapCategories = () => {
+    return loadedCategories.map((category, i) => {
+      return (
+        <option key={i} value={category._id}>
+          {category.name}
+        </option>
+      );
+    });
+  };
 
   const changeHandler = name => async e => {
     if (name === "image") {
@@ -81,6 +101,14 @@ const Product = () => {
     }
   };
 
+  const checkedShippingHandler = e => {
+    if (shipping === false) {
+      setValues({ ...values, error: "", shipping: true });
+    } else {
+      setValues({ ...values, error: "", shipping: false });
+    }
+  };
+
   const submitHandler = e => {
     e.preventDefault();
     setValues({ ...values, error: "", isLoading: true });
@@ -93,9 +121,44 @@ const Product = () => {
       quantity,
       shipping
     };
-    createProduct(newProduct, token);
+    createProduct(newProduct, token).then(data => {
+      if (data.error) {
+        setValues({ ...values, isLoading: false, error: data.error });
+      } else {
+        setValues({
+          ...values,
+          title: "",
+          description: "",
+          price: "",
+          imageUrl: "",
+          category: "",
+          quantity: "",
+          shipping: "",
+          isLoading: false,
+          success: `${data.title} as been successfully created.`
+        });
+      }
+    });
     setValues({ ...values, isLoading: false });
   };
+
+  const showError = () => (
+    <div
+      className='alert alert-danger'
+      style={{ display: error ? "" : "none" }}
+    >
+      {error}
+    </div>
+  );
+
+  const showSuccess = () => (
+    <div
+      className='alert alert-success'
+      style={{ display: success ? "" : "none" }}
+    >
+      {success}
+    </div>
+  );
 
   const newProductForm = () => {
     return (
@@ -118,22 +181,21 @@ const Product = () => {
               <span className='sr-only'>Loading...</span>
             </div>
           ) : (
-            <object
-              data='https://res.cloudinary.com/seoblog/image/upload/v1577972957/ecommerce/products/default_egwjnk.jpg'
-              type='image/*'
-            >
-              <img
-                src={imageUrl}
-                alt='product image'
-                className='img img-fluid mb-3 '
-                style={{
-                  width: 300,
-                  height: 300,
-                  objectFit: "cover",
-                  borderRadius: 5
-                }}
-              />
-            </object>
+            <img
+              src={
+                imageUrl
+                  ? imageUrl
+                  : "https://res.cloudinary.com/seoblog/image/upload/v1577972957/ecommerce/products/default_egwjnk.jpg"
+              }
+              alt='product image'
+              className='img img-fluid mb-3 '
+              style={{
+                width: 300,
+                height: 300,
+                objectFit: "cover",
+                borderRadius: 5
+              }}
+            />
           )}
         </div>
 
@@ -154,7 +216,7 @@ const Product = () => {
             type='text'
             className='form-control'
             rows='3'
-            maxLength='300'
+            maxLength='2000'
           />
         </div>
         <div className='form-group'>
@@ -187,8 +249,7 @@ const Product = () => {
             className='form-control'
           >
             <option value=''>Choose One</option>
-            <option value='5e03130ec64e0007bd8edf55'>Electronics</option>
-            <option value='5df9c87c145c650ecd18309d'>Sport</option>
+            {mapCategories()}
           </select>
         </div>
         <div className='form-group'>
@@ -198,6 +259,7 @@ const Product = () => {
             value={shipping}
             className='form-control'
           >
+            <option value=''>Choose One</option>
             <option value='false'>No</option>
             <option value='true'>Yes</option>
           </select>
@@ -206,9 +268,20 @@ const Product = () => {
             product.
           </small>
         </div>
-        <button type='submit' className='btn btn-primary'>
-          Submit
-        </button>
+
+        <div className='form-group'>
+          {showError()}
+          {showSuccess()}
+          <button type='submit' className='btn btn-primary'>
+            {isLoading ? (
+              <div className='spinner-border' role='status'>
+                <span className='sr-only'>Loading...</span>
+              </div>
+            ) : (
+              "Submit"
+            )}
+          </button>
+        </div>
       </form>
     );
   };
