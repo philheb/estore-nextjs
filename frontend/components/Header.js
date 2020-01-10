@@ -3,11 +3,12 @@ import Link from "next/link";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import NProgress from "nprogress";
-import { IoMdPersonAdd, IoMdLogOut, IoMdLogIn } from "react-icons/io";
+import { IoMdPersonAdd, IoMdLogOut, IoMdLogIn, IoMdCart } from "react-icons/io";
 import { MdSettings } from "react-icons/md";
 
 import { APP_NAME } from "../config";
 import { signout, isAuth } from "../actions/auth";
+import Search from "./Search";
 import {
   Collapse,
   Navbar,
@@ -49,6 +50,22 @@ const Header = props => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className='ml-auto nav-align' navbar>
+            <Search />
+            <NavItem>
+              <Link href='/shop'>
+                <NavLink
+                  className='mr-4'
+                  style={
+                    path === "/shop"
+                      ? { color: "#212529", cursor: "pointer" }
+                      : { cursor: "pointer" }
+                  }
+                >
+                  <IoMdCart className='mr-1' />
+                  Shop
+                </NavLink>
+              </Link>
+            </NavItem>
             {!auth && (
               <>
                 <NavItem>
@@ -57,7 +74,7 @@ const Header = props => {
                       className='mr-4 '
                       style={
                         path === "/auth/signin"
-                          ? { color: "black", cursor: "pointer" }
+                          ? { color: "#212529", cursor: "pointer" }
                           : { cursor: "pointer" }
                       }
                     >
@@ -72,7 +89,7 @@ const Header = props => {
                       className='mr-4 '
                       style={
                         path === "/auth/signup"
-                          ? { color: "black", cursor: "pointer" }
+                          ? { color: "#212529", cursor: "pointer" }
                           : { cursor: "pointer" }
                       }
                     >
@@ -91,7 +108,7 @@ const Header = props => {
                       className='mr-4 '
                       style={
                         path === "/dashboard"
-                          ? { color: "black", cursor: "pointer" }
+                          ? { color: "#212529", cursor: "pointer" }
                           : { cursor: "pointer" }
                       }
                     >

@@ -1,61 +1,23 @@
-import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
-import { getProducts } from "../actions/product";
-import ProductCard from "../components/product/ProductCard";
-
+import ProductBy from "../components/product/ProductBy";
 const Index = () => {
-  const [productsBySold, setProductsBySold] = useState([]);
-  const [productsByArrival, setProductsByArrival] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    loadProductsByArrival();
-    loadProductsBySold();
-  }, []);
-
-  const loadProductsBySold = () => {
-    setIsLoading(true);
-    getProducts("sold").then(data => {
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setProductsBySold(data);
-      }
-      setIsLoading(false);
-    });
-  };
-
-  const loadProductsByArrival = () => {
-    setIsLoading(true);
-    getProducts("createdAt").then(data => {
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setProductsByArrival(data);
-      }
-      setIsLoading(false);
-    });
-  };
-
-  const showProductsByArrival = () => {
-    return productsByArrival.map((product, index) => {
-      return <ProductCard key={index} product={product} />;
-    });
-  };
-
-  const showProductsBySold = () => {
-    return productsBySold.map((product, index) => {
-      return <ProductCard key={index} product={product} />;
-    });
-  };
-
   return (
     <Layout>
       <main className='container'>
-        <h2 className='display-4'>Index Page</h2>
-        <section>
-          <article className='row'>{showProductsBySold()}</article>
+        <h2 className='display-4 mb-5'>Welcome to our store!</h2>
+        <section className='mb-5'>
+          <h2>Best Sellers</h2>
+          <hr className='mb-5' />
+          <article className='row'>
+            <ProductBy sortBy='sold' />
+          </article>
+        </section>
+        <section className='mb-5'>
+          <h2>New Arrivals</h2>
+          <hr className='mb-5' />
+          <article className='row'>
+            <ProductBy sortBy='createAt' />
+          </article>
         </section>
       </main>
     </Layout>

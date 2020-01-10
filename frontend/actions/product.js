@@ -1,4 +1,5 @@
 import fetch from "isomorphic-fetch";
+import queryString from "query-string";
 import { API } from "../config";
 import { handleResponse } from "./auth";
 
@@ -21,16 +22,44 @@ export const createProduct = (product, token) => {
     });
 };
 
-export const getProducts = sortBy => {
-  return fetch(`${API}/products?sortBy=${sortBy}&order=desc&limit=6`, {
-    method: "GET"
-  })
+export const getProduct = slug => {
+  return fetch(`${API}/product/${slug}`)
     .then(res => {
       return res.json();
     })
     .catch(err => {
       console.log(err);
     });
+};
+
+export const getProducts = (sortBy, min, max, skip) => {
+  let gte = min ? min : 0;
+  let lte = max ? max : 99999999;
+  let theSkip = skip ? skip : 0;
+
+  return fetch(
+    `${API}/products?sortBy=${sortBy}&order=desc&limit=6&gte=${gte}&lte=${lte}&skip=${theSkip}`,
+    {
+      method: "GET"
+    }
+  )
+    .then(res => {
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const listSearch = params => {
+  const query = queryString.stringify(params);
+  return fetch(`${API}/products/search?${query}`, {
+    method: "GET"
+  })
+    .then(response => {
+      return response.json();
+    })
+    .catch(err => console.log(err));
 };
 
 // export const getCategory = slug => {

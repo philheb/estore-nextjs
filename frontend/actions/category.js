@@ -33,9 +33,34 @@ export const getCategories = () => {
     });
 };
 
-export const getCategory = slug => {
-  return fetch(`${API}/category/${slug}`, {
-    method: "GET"
+// export const getCategory = (slug, limit, skip, lte, gte, search) => {
+//   const data = { slug, limit, skip, lte, gte, search };
+//   console.log(data);
+//   return fetch(`${API}/category/${slug}`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify(data)
+//   })
+//     .then(res => {
+//       return res.json();
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// };
+export const getCategory = data => {
+  console.log(data);
+  // return fetch(`${API}/category/${data.slug}`, {
+  return fetch(`${API}/category/${data.slug}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
   })
     .then(res => {
       return res.json();

@@ -104,17 +104,24 @@ exports.update = (req, res) => {
 
 exports.list = (req, res) => {
   let order = req.query.order ? req.query.order : "asc";
+  let skip = req.query.skip ? parseInt(req.query.skip) : 0;
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
   let limit = req.query.limit ? parseInt(req.query.limit) : 4;
+  let gte = req.query.gte ? parseInt(req.query.gte) : 0;
+  let lte = req.query.lte ? parseInt(req.query.lte) : 9999999999;
+  let slug = req.query.category ? req.query.category : "";
 
-  Product.find()
+  console.log(req.query.gte, req.query.lte);
+
+  Product.find({ price: { $gte: gte, $lte: lte } })
     .populate("category")
     .sort([[sortBy, order]])
+    .skip(skip)
     .limit(limit)
     .exec((err, products) => {
       if (err) {
         return req.json({
-          err: errorHandler(err)
+          error: err
         });
       }
       res.json(products);
@@ -191,4 +198,23 @@ exports.listSearch = (req, res) => {
         data
       });
     });
+};
+
+exports.listSearch = (req, res) => {
+  const query = {};
+  if (req.query.search) {
+    query.title = { $regex: req.query.search, $options: "i" };
+    if (req.query.category && req.query.category != "All") {
+      query.category = req.query.category;
+    }
+
+    Product.find(query, (err, products) => {
+      if (err) {
+        return res.status(400).json({
+          error: errorHandler(err)
+        });
+      }
+      res.json(products);
+    }).select("-photo");
+  }
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Draft from "./Draft";
 import { getCookie } from "../../actions/auth";
 import { createProduct } from "../../actions/product";
 import { getCategories } from "../../actions/category";
@@ -219,6 +220,7 @@ const CreateProduct = () => {
             maxLength='2000'
           />
         </div>
+
         <div className='form-group'>
           <label className='text-muted'>Price</label>
           <input

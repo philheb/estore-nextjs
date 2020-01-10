@@ -10,7 +10,7 @@ const { requireSignin, adminMiddleware } = require("../controllers/auth");
 // } = require("../validators/auth");
 
 router.post("/category/create", requireSignin, adminMiddleware, create);
-router.get("/category/:slug", read);
+router.post("/category/:slug", read);
 router.get("/categories", list);
 router.delete("/category/:slug", requireSignin, adminMiddleware, remove);
 

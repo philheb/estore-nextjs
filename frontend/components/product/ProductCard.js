@@ -1,77 +1,75 @@
+import { IoMdCart } from "react-icons/io";
+import Link from "next/link";
+import Review from "./Review";
+
 const ProductCard = props => {
   const { product } = props;
-  product.rating = "75%";
-
-  const stars = () => {
-    return (
-      <>
-        <div className='star-ratings-css'>
-          <div
-            className='star-ratings-css-top'
-            style={{ width: product.rating }}
-          >
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-          </div>
-          <div className='star-ratings-css-bottom'>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-          </div>
-        </div>
-        <style jsx>
-          {`
-            .star-ratings-css {
-              unicode-bidi: bidi-override;
-              color: #c5c5c5;
-              font-size: 25px;
-              height: 25px;
-              width: 125px;
-              position: relative;
-              padding: 0;
-              // text-shadow: 0px 1px 0 #a2a2a2;
-            }
-
-            .star-ratings-css-top {
-              color: #e7711b;
-              padding: 0;
-              position: absolute;
-              z-index: 1;
-              display: block;
-              top: 0;
-              left: 0;
-              overflow: hidden;
-            }
-
-            .star-ratings-css-bottom {
-              padding: 0;
-              display: block;
-              z-index: 0;
-            }
-          `}
-        </style>
-      </>
-    );
-  };
+  product.rating = "25%";
+  product.reviews = "100";
 
   return (
-    <div className='col-md-4 mb-4'>
-      <h4>{product.title}</h4>
-      <img
-        className='mb-4'
-        src={product.imageUrl}
-        alt={product.title + " image"}
-        style={{ width: 300, height: 300, objectFit: "cover" }}
-      />
-      <h5>{product.title}</h5>
+    <div className='col-md-6 col-lg-4 mb-5 small-card'>
+      <Link href={`/product/${product.slug}`}>
+        <img
+          className='mb-4'
+          src={product.imageUrl}
+          alt={product.title + " image"}
+          style={{ maxWidth: "100%", objectFit: "cover", cursor: "pointer" }}
+        />
+      </Link>
+      <Link href={`/product/${product.slug}`}>
+        <h5 style={{ cursor: "pointer" }}>{product.title}</h5>
+      </Link>
       <p>{`$${product.price.toFixed(2)}`}</p>
-      {stars()}
-      <hr />
+
+      <div className='mb-2'>
+        <Review product={product} />
+      </div>
+      <div className='d-flex justify-content-end'>
+        <div>
+          <Link href='/'>
+            <a className='icon' style={{ color: "#bbb" }}>
+              <IoMdCart style={{ fontSize: 30 }} />
+            </a>
+          </Link>
+        </div>
+      </div>
+      {/* <hr /> */}
+      <style jsx>
+        {`
+          .small-card {
+            padding-bottom: 20px;
+          }
+          .small-card:hover {
+            animation-name: shadow;
+            animation-duration: 0.3s;
+            animation-fill-mode: forwards;
+          }
+          .icon:hover {
+            animation: icon 0.4s forwards;
+            // animation-name: icon;
+            // animation-duration: 0.9s;
+            // animation-fill-mode: forwards;
+          }
+          @keyframes shadow {
+            from {
+              box-shadow: 0;
+            }
+            to {
+              box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2),
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+          }
+          @keyframes icon {
+            from {
+              color: #bbb;
+            }
+            to {
+              color: #212529;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

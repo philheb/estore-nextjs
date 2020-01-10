@@ -1,4 +1,5 @@
 const Category = require("../models/category");
+const Product = require("../models/product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const slugify = require("slugify");
 
@@ -26,14 +27,40 @@ exports.create = (req, res) => {
 };
 
 exports.read = (req, res) => {
+  console.log(req);
   const slug = req.params.slug.toLowerCase();
+  let limit = req.body.limit ? parseInt(req.body.limit) : 6;
+  let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+  let gte = req.body.gte ? parseInt(req.body.gte) : 0;
+  let lte = req.body.lte ? parseInt(req.body.lte) : 9999999999;
+  let search = req.body.search ? req.body.search : "";
+  console.log(search);
+  let products;
+
   Category.findOne({ slug }).exec((err, category) => {
     if (err) {
       return res.status(400).json({
         error: errorHandler(err)
       });
     }
-    res.json(category);
+    Product.find({
+      category,
+      price: { $gte: gte, $lte: lte },
+      $or: [{ title: { $regex: search, $options: "i" } }]
+    })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec((err, data) => {
+        if (err) {
+          return res.json({
+            error: errorHandler(err)
+          });
+        }
+        products = data;
+
+        res.json({ category, products, size: products.length });
+      });
   });
 };
 

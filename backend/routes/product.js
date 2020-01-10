@@ -51,6 +51,6 @@ router.get("/products", list);
 router.post("/products/related", listRelated);
 router.get("/products/categories", listCategories);
 
-router.post("/products/search", listSearch);
+router.get("/products/search", listSearch);
 
 module.exports = router;
