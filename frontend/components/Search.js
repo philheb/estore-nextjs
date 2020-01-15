@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Router from "next/router";
-import { withRouter } from "next/router";
 import { getCategories } from "../actions/category";
 import {
   InputGroup,
@@ -175,4 +174,4 @@ const Search = () => {
   return <div>{searchForm2()}</div>;
 };
 
-export default withRouter(Search);
+export default Search;

@@ -1,8 +1,16 @@
 import Router from "next/router";
 import renderHTML from "react-render-html";
-import ReactImageMagnify from "react-image-magnify";
+
 import { IoMdCart } from "react-icons/io";
 import moment from "moment";
+import {
+  Magnifier,
+  GlassMagnifier,
+  SideBySideMagnifier,
+  PictureInPictureMagnifier,
+  MOUSE_ACTIVATION,
+  TOUCH_ACTIVATION
+} from "react-image-magnifiers";
 
 import { addItem } from "../../actions/cart";
 import Review from "../../components/product/Review";
@@ -37,8 +45,13 @@ const ProductLargeCard = ({ product }) => {
 
   return (
     <div className='row'>
-      <div className='col-md-6'>
-        <ReactImageMagnify
+      <div className='col-md-6' style={{ zIndex: 2 }}>
+        <SideBySideMagnifier
+          shadow
+          imageSrc={product.imageUrl}
+          imageAlt={`${product.title} image`}
+        />
+        {/* <ReactImageMagnify
           {...{
             smallImage: {
               alt: `${product.title} image`,
@@ -53,7 +66,7 @@ const ProductLargeCard = ({ product }) => {
             enlargedImageContainerStyle: { zIndex: 2 },
             imageStyle: { borderRadius: 20 }
           }}
-        />
+        /> */}
       </div>
       <div className='col-md-6'>
         <h2>{product.title}</h2>

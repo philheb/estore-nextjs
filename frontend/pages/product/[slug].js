@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
+import { getProduct, listRelated } from "../../actions/product";
 import ProductLargeCard from "../../components/product/ProductLargeCard";
 import ProductCard from "../../components/product/ProductCard";
-import { getProduct, listRelated } from "../../actions/product";
 
 const Product = ({ product }) => {
   const [loadingRelated, setLoadingRelated] = useState(false);
@@ -10,7 +10,7 @@ const Product = ({ product }) => {
 
   useEffect(() => {
     getRelated();
-  }, [product]);
+  }, []);
 
   const getRelated = () => {
     setLoadingRelated(true);
