@@ -29,7 +29,11 @@ const ProductBy = props => {
     );
   } else {
     return loadedProducts.map((product, index) => {
-      return <ProductCard key={index} product={product} />;
+      return (
+        <div key={index} className='mb-5 small-card col-md-6 col-lg-4'>
+          <ProductCard product={product} />
+        </div>
+      );
     });
   }
 };

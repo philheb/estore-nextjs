@@ -156,10 +156,20 @@ const Search = () => {
 
   const submitHandler = e => {
     e.preventDefault();
-    Router.push({
-      pathname: "/product/search",
-      query: { search: search, category: category._id }
-    });
+
+    if (search == undefined && !category._id) {
+      console.log("No search, no category");
+      Router.push("/shop");
+    } else if (search == undefined && category._id) {
+      console.log("No search, ONE category");
+      Router.push(`/category/${category.slug}`);
+    } else {
+      console.log("Search and CAT!!");
+      Router.push({
+        pathname: "/product/search",
+        query: { search: search, category: category._id }
+      });
+    }
   };
 
   return <div>{searchForm2()}</div>;

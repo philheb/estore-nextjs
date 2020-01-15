@@ -3,7 +3,6 @@ import Layout from "../components/Layout";
 import Sidebar from "../components/Sidebar";
 import ProductCard from "../components/product/ProductCard";
 import { getProducts } from "../actions/product";
-import { render } from "react-dom";
 
 const Shop = () => {
   const [loadedCategory, setLoadedCategory] = useState("");
@@ -47,30 +46,13 @@ const Shop = () => {
     renderProducts();
   };
 
-  // const showDefaultProducts = () => {
-  //   return (
-  //     <>
-  //       <section className='mb-5'>
-  //         <h2>Best Sellers</h2>
-  //         <hr className='mb-5' />
-  //         <article className='row'>
-  //           <ProductBy sortBy='sold' gte={minPrice} lte={maxPrice} />
-  //         </article>
-  //       </section>
-  //       <section className='mb-5'>
-  //         <h2>New Arrivals</h2>
-  //         <hr className='mb-5' />
-  //         <article className='row'>
-  //           <ProductBy sortBy='createAt' gte={minPrice} lte={maxPrice} />
-  //         </article>
-  //       </section>
-  //     </>
-  //   );
-  // };
-
   const showLoadedProducts = () => {
     return loadedProducts.map((product, index) => {
-      return <ProductCard key={index} product={product} />;
+      return (
+        <div key={index} className='mb-5 small-card col-md-6 col-lg-4'>
+          <ProductCard product={product} />
+        </div>
+      );
     });
   };
 

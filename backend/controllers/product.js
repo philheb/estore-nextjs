@@ -46,14 +46,16 @@ exports.create = (req, res) => {
 
 exports.read = (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  Product.findOne({ slug }).exec((err, data) => {
-    if (err) {
-      return req.json({
-        err: errorHandler(err)
-      });
-    }
-    res.json(data);
-  });
+  Product.findOne({ slug })
+    .populate("category")
+    .exec((err, data) => {
+      if (err) {
+        return req.json({
+          err: errorHandler(err)
+        });
+      }
+      res.json(data);
+    });
 };
 
 exports.remove = (req, res) => {
@@ -130,7 +132,7 @@ exports.list = (req, res) => {
 
 exports.listRelated = (req, res) => {
   let limit = req.body.limit ? parseInt(req.body.limit) : 3;
-  let { _id, category } = req.body.product;
+  let { _id, category } = req.body;
 
   Product.find({ _id: { $ne: _id }, category: { $in: category } })
     .sort([["createdAt", "desc"]])

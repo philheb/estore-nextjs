@@ -52,8 +52,6 @@ export const getCategories = () => {
 //     });
 // };
 export const getCategory = data => {
-  console.log(data);
-  // return fetch(`${API}/category/${data.slug}`, {
   return fetch(`${API}/category/${data.slug}`, {
     method: "POST",
     headers: {

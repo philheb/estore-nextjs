@@ -1,14 +1,21 @@
 import { IoMdCart } from "react-icons/io";
 import Link from "next/link";
 import Review from "./Review";
+import { addItem } from "../../actions/cart";
+import Router from "next/router";
 
 const ProductCard = props => {
   const { product } = props;
   product.rating = "25%";
   product.reviews = "100";
 
+  const addToCart = () => {
+    addItem(product);
+    Router.push("/cart");
+  };
+
   return (
-    <div className='col-md-6 col-lg-4 mb-5 small-card'>
+    <>
       <Link href={`/product/${product.slug}`}>
         <img
           className='mb-4'
@@ -27,50 +34,17 @@ const ProductCard = props => {
       </div>
       <div className='d-flex justify-content-end'>
         <div>
-          <Link href='/'>
-            <a className='icon' style={{ color: "#bbb" }}>
+          {product.quantity < 1 ? (
+            <span className='badge badge-warning '>Out of stock</span>
+          ) : (
+            <a onClick={addToCart} className='icon' style={{ color: "#bbb" }}>
               <IoMdCart style={{ fontSize: 30 }} />
             </a>
-          </Link>
+          )}
         </div>
       </div>
       {/* <hr /> */}
-      <style jsx>
-        {`
-          .small-card {
-            padding-bottom: 20px;
-          }
-          .small-card:hover {
-            animation-name: shadow;
-            animation-duration: 0.3s;
-            animation-fill-mode: forwards;
-          }
-          .icon:hover {
-            animation: icon 0.4s forwards;
-            // animation-name: icon;
-            // animation-duration: 0.9s;
-            // animation-fill-mode: forwards;
-          }
-          @keyframes shadow {
-            from {
-              box-shadow: 0;
-            }
-            to {
-              box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2),
-                0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            }
-          }
-          @keyframes icon {
-            from {
-              color: #bbb;
-            }
-            to {
-              color: #212529;
-            }
-          }
-        `}
-      </style>
-    </div>
+    </>
   );
 };
 

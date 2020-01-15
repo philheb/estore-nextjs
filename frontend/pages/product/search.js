@@ -1,19 +1,20 @@
 import Layout from "../../components/Layout";
-import { getCategory } from "../../actions/category";
 import ProductCard from "../../components/product/ProductCard";
 import { listSearch } from "../../actions/product";
 
-const Search = ({ products, category, query }) => {
+const Search = ({ products, query }) => {
   const showProducts = () => {
     return products.map((product, index) => (
-      <ProductCard key={index} product={product} />
+      <div key={index} className='mb-5 small-card col-md-6 col-lg-4'>
+        <ProductCard product={product} />
+      </div>
     ));
   };
 
   return (
     <Layout>
       <main>
-        <div className='container-fluid'>
+        <div className='container'>
           <header>
             <div className='col-md-12 pt-3'>
               <h3 className='display-5 text-center'>

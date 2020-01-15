@@ -7,7 +7,7 @@ export const handleResponse = response => {
   if (response.status === 401) {
     signout(() => {
       Router.push({
-        pathname: "/signin",
+        pathname: "/auth/signin",
         query: {
           message: "Your session is expired. Please sign in."
         }

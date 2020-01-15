@@ -28,7 +28,11 @@ const Category = ({ category, query }) => {
       );
     } else if (loadedProducts.length > 0) {
       return loadedProducts.map((product, index) => {
-        return <ProductCard key={index} product={product} />;
+        return (
+          <article key={index} className='mb-5 small-card col-md-6 col-lg-4'>
+            <ProductCard product={product} />
+          </article>
+        );
       });
     } else {
       return (
@@ -84,7 +88,6 @@ const Category = ({ category, query }) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log(data);
         setLoadedProducts([...loadedProducts, ...data.products]);
         setSize(data.products.length);
         setSkip(toSkip);
@@ -127,7 +130,6 @@ Category.getInitialProps = ({ query }) => {
     if (data.error) {
       console.log(data.error);
     } else {
-      console.log("DATA: ", data);
       return { category: data.category, query };
     }
   });

@@ -1,39 +1,51 @@
-import renderHTML from "react-render-html";
-import ReactImageMagnify from "react-image-magnify";
+import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
-import { getProduct } from "../../actions/product";
-import Review from "../../components/product/Review";
+import ProductLargeCard from "../../components/product/ProductLargeCard";
+import ProductCard from "../../components/product/ProductCard";
+import { getProduct, listRelated } from "../../actions/product";
 
 const Product = ({ product }) => {
+  const [loadingRelated, setLoadingRelated] = useState(false);
+  const [relatedProducts, setRelatedProduct] = useState([]);
+
+  useEffect(() => {
+    getRelated();
+  }, [product]);
+
+  const getRelated = () => {
+    setLoadingRelated(true);
+    listRelated(product).then(response => {
+      setRelatedProduct(response);
+    });
+    setLoadingRelated(false);
+  };
+
+  const showRelatedProducts = () => {
+    return relatedProducts.map((product, index) => {
+      return (
+        <div key={index} className='col-md-4 small-card mb-4 p-3'>
+          <ProductCard product={product} />
+        </div>
+      );
+    });
+  };
+
   return (
     <Layout>
       <div className='container'>
         <div className='row'>
-          <div className='col-md-6'>
-            <ReactImageMagnify
-              {...{
-                smallImage: {
-                  alt: `${product.title} image`,
-                  isFluidWidth: true,
-                  src: product.imageUrl
-                },
-                largeImage: {
-                  src: product.imageUrl,
-                  enlargedImageContainerStyle: { backgroundColor: "black" },
-                  width: 1800,
-                  height: 1800
-                },
-                enlargedImageContainerStyle: { zIndex: 2 }
-              }}
-            />
+          <div className='col-md-12 mb-5'>
+            <ProductLargeCard product={product} />
           </div>
-          <div className='col-md-6'>
-            <h2>{product.title}</h2>
-            <Review product={product} />
-            <hr />
-            <h4>{`$${parseInt(product.price).toFixed(2)}`}</h4>
-            <p>{renderHTML(product.description)}</p>
-          </div>
+          {relatedProducts.length > 0 ? (
+            <div>
+              <h4 className='text-center mb-4'>Related Products</h4>
+              <hr />
+              <div className='row'>{showRelatedProducts()}</div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </Layout>

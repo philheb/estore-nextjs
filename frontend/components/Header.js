@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { useRouter } from "next/router";
+import { totalItem } from "../actions/cart";
 import NProgress from "nprogress";
-import { IoMdPersonAdd, IoMdLogOut, IoMdLogIn, IoMdCart } from "react-icons/io";
+import {
+  IoMdPersonAdd,
+  IoMdLogOut,
+  IoMdLogIn,
+  IoMdCart,
+  IoMdPricetags
+} from "react-icons/io";
 import { MdSettings } from "react-icons/md";
 
 import { APP_NAME } from "../config";
@@ -31,6 +38,7 @@ Router.onRouteChangeError = url => NProgress.done();
 const Header = props => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState(false);
+  const [count, setCount] = useState(0);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -38,6 +46,7 @@ const Header = props => {
 
   useEffect(() => {
     setAuth(isAuth() ? true : false);
+    setCount(totalItem());
   }, []);
 
   return (
@@ -61,8 +70,23 @@ const Header = props => {
                       : { cursor: "pointer" }
                   }
                 >
-                  <IoMdCart className='mr-1' />
+                  <IoMdPricetags className='mr-1' />
                   Shop
+                </NavLink>
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link href='/cart'>
+                <NavLink
+                  className='mr-4'
+                  style={
+                    path === "/cart"
+                      ? { color: "#212529", cursor: "pointer" }
+                      : { cursor: "pointer" }
+                  }
+                >
+                  <IoMdCart className='mr-1' />
+                  {count > 0 ? `Cart (${count})` : `Cart`}
                 </NavLink>
               </Link>
             </NavItem>
