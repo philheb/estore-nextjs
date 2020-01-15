@@ -1,22 +1,36 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { getCart } from "../actions/cart";
-import { useEffect } from "react";
+import { getCheckoutItems } from "../actions/checkout";
+import { getCookie } from "../actions/auth";
 
-const Checkout = ({ products }) => {
-  useEffect(() => {}, []);
+const Checkout = () => {
+  const [checkoutProducts, setCheckoutProducts] = useState([]);
+  const [total, setTotal] = useState(null);
 
-  const getTotalPrice = () => {
+  const token = getCookie("token");
+
+  useEffect(() => {
+    getCartProductIds();
+  }, []);
+
+  const getCartProductIds = () => {
     let productIds = [];
-    products.map(product => {
-      productIds.push(product._id);
+    getCart().map(product => productIds.push(product._id));
+    getCheckoutItems(token, productIds).then(response => {
+      if (response.error) {
+        console.log(response.error);
+      } else {
+        setCheckoutProducts(response.products);
+        setTotal(parseFloat(response.total).toFixed(2));
+      }
     });
-    console.log(productIds);
   };
 
   return (
     <Layout>
-      {JSON.stringify(products)}
-      {getTotalPrice()}
+      {JSON.stringify(checkoutProducts)}
+      {total}
     </Layout>
   );
 };

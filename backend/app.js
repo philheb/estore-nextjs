@@ -12,6 +12,7 @@ const categoryRoutes = require("./routes/category");
 const productRoutes = require("./routes/product");
 const paymentRoutes = require("./routes/payment");
 const orderRoutes = require("./routes/payment");
+const checkoutRoutes = require("./routes/checkout");
 
 //APP
 const app = express();
@@ -44,6 +45,7 @@ app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 app.use("/api", paymentRoutes);
 app.use("/api", orderRoutes);
+app.use("/api", checkoutRoutes);
 
 const port = process.env.PORT || 8000;
 

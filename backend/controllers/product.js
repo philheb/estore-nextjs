@@ -50,7 +50,7 @@ exports.read = (req, res) => {
     .populate("category")
     .exec((err, data) => {
       if (err) {
-        return req.json({
+        return res.json({
           err: errorHandler(err)
         });
       }
