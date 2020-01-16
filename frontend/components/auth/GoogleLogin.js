@@ -6,7 +6,7 @@ import ReactGoogleLogin from "react-google-login";
 import { loginWithGoogle, isAuth, authenticate } from "../../actions/auth";
 import { GOOGLE_CLIENT_ID } from "../../config";
 
-const GoogleLogin = () => {
+const GoogleLogin = ({ path }) => {
   const responseGoogle = response => {
     const tokenId = response.tokenId;
     const user = { tokenId };
@@ -17,9 +17,9 @@ const GoogleLogin = () => {
       } else {
         authenticate(data, () => {
           if (isAuth() && isAuth().role === 1) {
-            Router.push(`/index`);
+            Router.push(path);
           } else {
-            Router.push(`/index`);
+            Router.push(path);
           }
         });
       }

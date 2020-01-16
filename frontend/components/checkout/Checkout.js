@@ -13,14 +13,15 @@ const Checkout = props => {
   const [paymentToken, setPaymentToken] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [instance, setInstance] = useState({});
-  const [address, setAddress] = useState("");
+  const [instance, setInstance] = useState(undefined);
   const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState(false);
 
   const token = getCookie("token");
 
   useEffect(() => {
     getToken();
+    setAddress(props.savedAddress);
   }, []);
 
   const getToken = () => {
@@ -53,7 +54,7 @@ const Checkout = props => {
   const showDropIn = () => (
     <section>
       {paymentToken && paymentToken !== "" && products.length > 0 ? (
-        <article onBlur={() => setError("")}>
+        <article className='mt-3' onBlur={() => setError("")}>
           <DropIn
             options={{
               authorization: paymentToken,
@@ -64,9 +65,20 @@ const Checkout = props => {
             onInstance={instance => setInstance(instance)}
           />
 
-          <button className='btn btn-success btn-block' onClick={submitPayment}>
-            Pay
-          </button>
+          {loading ? (
+            <button className='btn btn-lg btn-success '>
+              <div className='spinner-border text-white' role='status'>
+                <span className='sr-only'>Loading...</span>
+              </div>
+            </button>
+          ) : (
+            <button
+              className='btn btn-lg btn-success mt-3'
+              onClick={submitPayment}
+            >
+              Confirm
+            </button>
+          )}
         </article>
       ) : (
         ""
@@ -87,18 +99,12 @@ const Checkout = props => {
       ""
     );
   };
+
   const showLoading = () => {
-    if (loading) {
-      return (
-        <div class='spinner-border text-primary' role='status'>
-          <span class='sr-only'>Loading...</span>
-        </div>
-      );
-    } else {
-      return;
+    if (instance === undefined) {
+      return <p className='mb-4 text-secondary'>LOADING...</p>;
     }
   };
-
   const submitPayment = () => {
     setLoading(true);
     let nonce;
@@ -108,24 +114,27 @@ const Checkout = props => {
         nonce = data.nonce;
         let paymentData = {
           paymentMethodNonce: nonce,
-          amount: getTotal(products)
+          amount: parseFloat(getTotal()).toFixed(2)
         };
         processPayment(token, paymentData)
           .then(response => {
             const orderData = {
               products: products,
               transaction_id: response.transaction.id,
-              amount: response.transaction.amount
+              amount: response.transaction.amount,
+              address: address
             };
 
-            createOrder(token, orderData);
-
-            setLoading(false);
-            setSuccess(response.success);
-            //Empty card
-            emptyCard();
-            props.reloadCartItems();
-            //Create order
+            createOrder(token, orderData)
+              .then(response => {
+                emptyCard();
+                setSuccess(true);
+                setLoading(false);
+              })
+              .catch(error => {
+                setLoading(false);
+                setError(error.message);
+              });
           })
           .catch(error => {
             setLoading(false);
@@ -137,13 +146,32 @@ const Checkout = props => {
       });
   };
 
+  const showAddress = () => {
+    if (address) {
+      return (
+        <div className='mt-5 mb-5'>
+          <p>
+            Send to:
+            <br />
+            {`${address.firstName} ${address.lastName}`}
+            <br />
+            {address.address1}
+            <br />
+            {address.address2}
+          </p>
+        </div>
+      );
+    }
+  };
+
   return (
     <div>
-      <h5>Total: ${getTotal()}</h5>
+      <h5>Total: ${parseFloat(getTotal()).toFixed(2)}</h5>
+      {showAddress()}
       {showError()}
       {showSuccess()}
-      {showCheckout()}
       {showLoading()}
+      {showCheckout()}
     </div>
   );
 };

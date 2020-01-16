@@ -2,7 +2,7 @@ import fetch from "isomorphic-fetch";
 import { API } from "../config";
 import { handleResponse } from "./auth";
 
-export const getCheckoutItems = (token, productIds) => {
+export const getCheckoutItems = (token, productIds, productCounts) => {
   return fetch(`${API}/checkout`, {
     method: "POST",
     headers: {
@@ -10,7 +10,7 @@ export const getCheckoutItems = (token, productIds) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({ products: productIds })
+    body: JSON.stringify({ productIds, productCounts })
   })
     .then(res => {
       handleResponse(res);

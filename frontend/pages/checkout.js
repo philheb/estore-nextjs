@@ -1,36 +1,78 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Layout from "../components/Layout";
 import { getCart } from "../actions/cart";
-import { getCheckoutItems } from "../actions/checkout";
-import { getCookie } from "../actions/auth";
+import { getCookie, handleResponse } from "../actions/auth";
+import CheckoutForm from "../components/checkout/CheckoutForm";
+import CheckoutPayment from "../components/checkout/Checkout";
+import Private from "../components/auth/Private";
 
 const Checkout = () => {
-  const [checkoutProducts, setCheckoutProducts] = useState([]);
-  const [total, setTotal] = useState(null);
-
-  const token = getCookie("token");
+  const [items, setItems] = useState([]);
+  const [address, setAddress] = useState(null);
+  const [showAddress, setShowAddress] = useState(true);
+  const [showPayment, setShowPayment] = useState(false);
 
   useEffect(() => {
-    getCartProductIds();
+    getCartItems();
   }, []);
 
-  const getCartProductIds = () => {
-    let productIds = [];
-    getCart().map(product => productIds.push(product._id));
-    getCheckoutItems(token, productIds).then(response => {
-      if (response.error) {
-        console.log(response.error);
-      } else {
-        setCheckoutProducts(response.products);
-        setTotal(parseFloat(response.total).toFixed(2));
-      }
-    });
+  const getCartItems = () => {
+    setItems(getCart());
+  };
+
+  const handlerToggle = () => {
+    setShowAddress(!showAddress);
+    setShowPayment(!showPayment);
+  };
+
+  const onConfirmAddress = address => {
+    setAddress(address);
+    handlerToggle();
+  };
+
+  const showAddressForm = () => {
+    if (showAddress) {
+      return (
+        <section className='mb-5'>
+          <Link href='/cart'>
+            <a className='text-primary'>Back to cart</a>
+          </Link>
+          <h2>Address</h2>
+          <hr />
+
+          <CheckoutForm
+            savedAddress={address}
+            onConfirmAddress={address => onConfirmAddress(address)}
+          />
+        </section>
+      );
+    }
+  };
+
+  const showPaymentForm = () => {
+    if (showPayment) {
+      return (
+        <section className='mb-5'>
+          <a onClick={handlerToggle} className='text-primary'>
+            Back to address
+          </a>
+          <h2>Payment</h2>
+          <hr />
+          <CheckoutPayment savedAddress={address} products={items} />
+        </section>
+      );
+    }
   };
 
   return (
     <Layout>
-      {JSON.stringify(checkoutProducts)}
-      {total}
+      <Private>
+        <main className='container'>
+          {showAddressForm()}
+          {showPaymentForm()}
+        </main>
+      </Private>
     </Layout>
   );
 };

@@ -9,6 +9,10 @@ const Signin = ({ router }) => {
     }
     return;
   };
+
+  const nextPath = router.query.nextPath ? router.query.nextPath : "/";
+
+  console.log(nextPath);
   return (
     <Layout>
       <div className='container'>
@@ -16,7 +20,7 @@ const Signin = ({ router }) => {
         <div className='row'>
           <div className='col-md-6 offset-md-3'>
             {showRedirectMessage()}
-            <SigninCmp />
+            <SigninCmp path={nextPath} />
           </div>
         </div>
       </div>

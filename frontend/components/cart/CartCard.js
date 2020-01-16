@@ -23,6 +23,7 @@ const CartCard = props => {
       setError("Please select a number between 1 and 100");
     } else {
       updateItem(productId, quantity);
+      Router.reload("/cart");
     }
   };
 

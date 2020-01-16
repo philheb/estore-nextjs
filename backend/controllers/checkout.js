@@ -4,19 +4,48 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 const slugify = require("slugify");
 
 exports.getCheckoutItems = (req, res) => {
-  const productIds = req.body.products;
+  const productIds = req.body.productIds;
+  const productCounts = req.body.productCounts;
+  console.log("ids: ", productIds);
+  console.log("counts: ", productCounts);
+
   Product.find({ _id: productIds }).exec((err, products) => {
     if (err) {
       return res.json({
         error: err
       });
     }
-    const total = products.reduce((currentValue, nextValue) => {
-      return currentValue + nextValue.price;
-    }, 0);
 
-    res.json({ products: products, total: total });
+    products.map(product => {
+      console.log(product.id);
+      const indexP = productIds.indexOf(product.id);
+      console.log(indexP);
+    });
   });
+
+  //   let price = 0;
+  //   products.map((product, index) => {
+  //     console.log("count: ", parseInt(productCounts[index]));
+  //     product["count"] = parseInt(productCounts[index]);
+  //     console.log(price);
+  //     price = price + product.count * product.price;
+  //   });
+  //   console.log(price);
+
+  //   let total = 0;
+
+  // const total = () => {
+  //   return products.reduce((currentValue, nextValue) => {
+  //     return currentValue + nextValue.count * nextValue.price;
+  //   }, 0);
+  // };
+
+  // const total = products.reduce((currentValue, nextValue) => {
+  //   return currentValue + nextValue.price;
+  // }, 0);
+
+  //   res.json({ products: products, total: total });
+  // });
 
   // const getProducts = () => {
   //   let products = [];

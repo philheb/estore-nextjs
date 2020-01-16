@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import Layout from "../components/Layout";
+import { isAuth } from "../actions/auth";
 import { getCart } from "../actions/cart";
 import CartCard from "../components/cart/cartCard";
-import Checkout from "../components/cart/Checkout";
 import { IoMdCart } from "react-icons/io";
 
 const Cart = () => {
@@ -29,10 +29,42 @@ const Cart = () => {
     });
   };
 
-  const checkoutHandler = () => {
+  const needToLogin = () => {
     Router.push({
-      pathname: "/checkout"
+      pathname: "/auth/signin",
+      query: {
+        message:
+          "You are not logged in or your session is expired. Please sign in.",
+        nextPath: "/cart"
+      }
     });
+  };
+
+  const showCheckoutButton = () => {
+    if (isAuth() && items.length > 0) {
+      return (
+        <Link href='/checkout'>
+          <button className='btn btn-success btn-block'>Checkout Now</button>
+        </Link>
+      );
+    } else if (!isAuth() && items.length > 0) {
+      return (
+        <button
+          onClick={needToLogin}
+          className='btn btn-outline-primary btn-block'
+        >
+          Sign in to checkout
+        </button>
+      );
+    } else {
+      return;
+    }
+  };
+
+  const getTotal = () => {
+    return items.reduce((currentValue, nextValue) => {
+      return currentValue + nextValue.count * nextValue.price;
+    }, 0);
   };
 
   return (
@@ -56,10 +88,10 @@ const Cart = () => {
           <div className='col-md-4'>
             <h1>Cart Summary</h1>
             <hr className='mt-5' />
-
-            <button onClick={checkoutHandler} className='btn btn-success'>
-              Checkout Now
-            </button>
+            <h5 className='mb-3'>
+              Total: ${parseFloat(getTotal()).toFixed(2)}
+            </h5>
+            {showCheckoutButton()}
           </div>
         </div>
       </main>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { signinAction, authenticate, isAuth } from "../../actions/auth";
 import GoogleLogin from "./GoogleLogin";
 
-const SigninCmp = () => {
+const SigninCmp = ({ path }) => {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -31,9 +31,9 @@ const SigninCmp = () => {
       } else {
         authenticate(data, () => {
           if (isAuth() && isAuth().role === 1) {
-            Router.push("/");
+            Router.push(path);
           } else {
-            Router.push("/");
+            Router.push(path);
           }
         });
       }
@@ -89,7 +89,7 @@ const SigninCmp = () => {
       {showError()}
       {showMessage()}
       {showLoading()}
-      <GoogleLogin />
+      <GoogleLogin path={path} />
       {showForm && signinForm()}
       <hr />
       <Link href='/auth/password/forgot'>
