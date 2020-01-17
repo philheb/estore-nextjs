@@ -71,13 +71,15 @@ const Checkout = props => {
                 <span className='sr-only'>Loading...</span>
               </div>
             </button>
-          ) : (
+          ) : !success ? (
             <button
               className='btn btn-lg btn-success mt-3'
               onClick={submitPayment}
             >
               Confirm
             </button>
+          ) : (
+            ""
           )}
         </article>
       ) : (

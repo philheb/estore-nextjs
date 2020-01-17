@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 const { ObjectId } = mongoose.Schema;
 
-const CartItemSchema = new mongoose.Schema(
+const OrderItemSchema = new mongoose.Schema(
   {
     product: { type: ObjectId, ref: "Product" },
     title: String,
@@ -12,18 +11,18 @@ const CartItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const CartItem = mongoose.model("CartItem", CartItemSchema);
+const OrderItem = mongoose.model("OrderItem", OrderItemSchema);
 
 const OrderSchema = new mongoose.Schema(
   {
-    products: [CartItemSchema],
+    products: [OrderItemSchema],
     transaction_id: {},
     amount: { type: Number },
     address: {},
     status: {
       type: String,
       default: "Not processed",
-      enum: ["Not processed", "Processing", "Shipped", "Delivered", "Cancelled"] // enum means string objects
+      enum: ["Not processed", "Processing", "Shipped", "Delivered", "Cancelled"]
     },
     updated: Date,
     user: { type: ObjectId, ref: "User" }
@@ -33,4 +32,4 @@ const OrderSchema = new mongoose.Schema(
 
 const Order = mongoose.model("Order", OrderSchema);
 
-module.exports = { Order, CartItem };
+module.exports = { Order, OrderItem };

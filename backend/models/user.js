@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = require("mongoose");
 const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
@@ -27,6 +28,10 @@ const userSchema = new mongoose.Schema(
     role: {
       type: Number,
       default: 0
+    },
+    cart: {
+      type: ObjectId,
+      ref: "Cart"
     },
     history: {
       type: Array,

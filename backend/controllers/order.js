@@ -8,39 +8,47 @@ exports.create = (req, res) => {
   req.body.order.user = req.profile;
 
   //save to User History
-  let history = [];
+  let products = [];
   req.body.order.products.forEach(item => {
-    history.push({
+    products.push({
       _id: item._id,
-      title: items.title,
+      title: item.title,
       description: item.description,
+      price: item.price,
       category: item.category,
-      quantity: item.count,
-      transaction_id: req.body.order.transaction_id,
-      amount: req.body.order.amount
+      quantity: item.count
     });
   });
-  // I am HEEERRRREEEE !!!!!!!!!!!!!!!!!!!
-  // User.findOneAndUpdate(
-  //   { _id: req.profile._id },
-  //   { $push: { history: history } },
-  //   { new: true },
-  //   (error, data) => {
-  //     if(error) {
-  //       return res.status(400).json({
-  //         error: "Could not find the user"
-  //       })
-  //     }
-  //   }
-  // );
 
-  const order = new Order(req.body.order);
-  order.save((error, data) => {
-    if (error) {
-      return res.status(400).json({
-        error: error
+  let newOrder = {
+    products,
+    transaction_id: req.body.order.transaction_id,
+    amount: req.body.order.amount
+  };
+
+  User.findOneAndUpdate(
+    { _id: req.profile._id },
+    {
+      $push: {
+        history: newOrder
+      }
+    },
+    { new: true },
+    (error, data) => {
+      if (error) {
+        return res.status(400).json({
+          error: "Could not find the user"
+        });
+      }
+      const order = new Order(req.body.order);
+      order.save((error, data) => {
+        if (error) {
+          return res.status(400).json({
+            error: error
+          });
+        }
+        return res.json(data);
       });
     }
-    return res.json(data);
-  });
+  );
 };
