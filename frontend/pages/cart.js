@@ -6,6 +6,7 @@ import { isAuth } from "../actions/auth";
 import { getCart } from "../actions/cart";
 import CartCard from "../components/cart/cartCard";
 import { IoMdCart } from "react-icons/io";
+import { getCookie } from "../actions/auth";
 
 const Cart = () => {
   const [items, setItems] = useState([]);
@@ -19,14 +20,16 @@ const Cart = () => {
   };
 
   const showItems = () => {
-    return items.map((product, index) => {
-      return (
-        <div key={index}>
-          <CartCard product={product} />
-          <hr className='mt-0' />
-        </div>
-      );
-    });
+    if (items && items.length > 0) {
+      return items.map((product, index) => {
+        return (
+          <div key={index}>
+            <CartCard product={product} />
+            <hr className='mt-0' />
+          </div>
+        );
+      });
+    }
   };
 
   const needToLogin = () => {
@@ -41,7 +44,7 @@ const Cart = () => {
   };
 
   const showCheckoutButton = () => {
-    if (isAuth() && items.length > 0) {
+    if (isAuth() && items && items.length > 0) {
       return (
         <Link href='/checkout'>
           <button className='btn btn-success btn-block'>Checkout Now</button>
@@ -62,9 +65,13 @@ const Cart = () => {
   };
 
   const getTotal = () => {
-    return items.reduce((currentValue, nextValue) => {
-      return currentValue + nextValue.count * nextValue.price;
-    }, 0);
+    if (items && items.length > 0) {
+      return items.reduce((currentValue, nextValue) => {
+        return currentValue + nextValue.count * nextValue.price;
+      }, 0);
+    } else {
+      return "0";
+    }
   };
 
   return (
@@ -72,10 +79,10 @@ const Cart = () => {
       <main className='container-fluid'>
         <div className='row'>
           <div className='col-md-8'>
-            <h1>Shopping Cart ({items.length})</h1>
+            <h1>Shopping Cart ({items ? items.length : "0"})</h1>
             <hr className='mt-5' />
             <section>{showItems()}</section>
-            {items < 1 ? (
+            {items.length < 1 ? (
               <Link href='/shop'>
                 <a>
                   Continue Shopping <IoMdCart />

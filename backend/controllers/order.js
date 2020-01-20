@@ -52,3 +52,18 @@ exports.create = (req, res) => {
     }
   );
 };
+
+exports.listOrders = (req, res) => {
+  Order.find()
+    .populate("user", "_id name")
+    .sort("-createAt")
+    .exec((error, orders) => {
+      if (error) {
+        return res.status(400).json({
+          error: error
+        });
+      }
+      console.log(orders);
+      res.json(orders);
+    });
+};

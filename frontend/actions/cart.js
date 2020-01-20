@@ -1,3 +1,7 @@
+import fetch from "isomorphic-fetch";
+import { API } from "../config";
+import { handleResponse, isAuth } from "./auth";
+
 export const addItem = item => {
   let cart = [];
   let localCart = localStorage.getItem("cart");
@@ -28,14 +32,34 @@ export const totalItem = () => {
   return 0;
 };
 
-export const getCart = () => {
-  let localCart = localStorage.getItem("cart");
+export const getCart = token => {
+  // if (!isAuth()) {
   if (typeof window !== "undefined") {
+    let localCart = localStorage.getItem("cart");
     if (localCart) {
       return JSON.parse(localCart);
+    } else {
+      return [];
     }
   }
-  return [];
+  // } else if (isAuth()) {
+  //   return fetch(`${API}/cart`, {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`
+  //     }
+  //   })
+  //     .then(res => {
+  //       handleResponse(res);
+  //       console.log(res);
+  //       return res.json();
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // }
 };
 
 export const updateItem = (productId, count) => {
@@ -76,3 +100,24 @@ export const emptyCard = () => {
     localStorage.removeItem("cart");
   }
 };
+
+// export const mergeLocalCart = token => {
+//   if (typeof window !== "undefined") {
+//     return fetch(`${API}/cart/merge`, {
+//       method: "POST",
+//       headers: {
+//         Accept: "application/json",
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`
+//       },
+//       body: localStorage.getItem("cart")
+//     })
+//       .then(res => {
+//         handleResponse(res);
+//         return res.json();
+//       })
+//       .catch(err => {
+//         console.log(err);
+//       });
+//   }
+// };

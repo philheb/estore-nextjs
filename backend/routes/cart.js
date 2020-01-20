@@ -2,10 +2,23 @@ const express = require("express");
 const router = express.Router();
 
 const { authMiddleware, requireSignin } = require("../controllers/auth");
-const { add, update, remove } = require("../controllers/cart");
+const {
+  add,
+  getCart,
+  getCartFromLocalStorage,
+  remove,
+  mergeLocalStorageCart
+} = require("../controllers/cart");
 
 router.post("/cart/add", requireSignin, authMiddleware, add);
-router.post("/cart/update", requireSignin, authMiddleware, update);
 router.delete("/cart/delete", requireSignin, authMiddleware, remove);
+router.get("/cart", requireSignin, authMiddleware, getCart);
+router.post("/cart/local", getCartFromLocalStorage);
+router.post(
+  "/cart/merge",
+  requireSignin,
+  authMiddleware,
+  mergeLocalStorageCart
+);
 
 module.exports = router;

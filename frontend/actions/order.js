@@ -21,3 +21,21 @@ export const createOrder = (token, orderData) => {
       console.log(err);
     });
 };
+
+export const listOrders = token => {
+  return fetch(`${API}/order/list`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      handleResponse(res);
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};

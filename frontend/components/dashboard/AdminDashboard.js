@@ -21,6 +21,11 @@ const Dashboard = props => {
         <h3 className='card-header'>Admin Links</h3>
         <ul className='list-group list-group-flush'>
           <li className='list-group-item'>
+            <Link href='/orders'>
+              <a>Orders</a>
+            </Link>
+          </li>
+          <li className='list-group-item'>
             <Link href='/category/create'>
               <a>Create Category</a>
             </Link>
