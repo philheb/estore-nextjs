@@ -53,7 +53,9 @@ const Header = props => {
     <div>
       <Navbar color='light' light expand='md'>
         <Link href='/'>
-          <NavbarBrand style={{ cursor: "pointer" }}>{APP_NAME}</NavbarBrand>
+          <NavLink style={{ cursor: "pointer", fontSize: "1.25rem" }}>
+            {APP_NAME}
+          </NavLink>
         </Link>
 
         <NavbarToggler onClick={toggle} />

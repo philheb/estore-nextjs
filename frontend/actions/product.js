@@ -51,6 +51,22 @@ export const getProducts = (sortBy, min, max, skip) => {
     });
 };
 
+export const getAllProducts = () => {
+  return fetch(
+    `${API}/products?limit=100&sortBy=title
+    `,
+    {
+      method: "GET"
+    }
+  )
+    .then(res => {
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 export const listSearch = params => {
   const query = queryString.stringify(params);
   return fetch(`${API}/products/search?${query}`, {
@@ -68,6 +84,43 @@ export const listRelated = product => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
+    },
+    body: JSON.stringify(product)
+  })
+    .then(res => {
+      handleResponse(res);
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const deleteProduct = (slug, token) => {
+  return fetch(`${API}/product/${slug}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      handleResponse(res);
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const updateProduct = (slug, token, product) => {
+  return fetch(`${API}/product/${slug}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify(product)
   })

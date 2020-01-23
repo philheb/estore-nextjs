@@ -35,6 +35,11 @@ const Dashboard = props => {
               <a>Create Product</a>
             </Link>
           </li>
+          <li className='list-group-item'>
+            <Link href='/product/manage'>
+              <a>Manage Products</a>
+            </Link>
+          </li>
         </ul>
       </section>
     );

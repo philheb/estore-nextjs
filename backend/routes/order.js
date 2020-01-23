@@ -6,7 +6,12 @@ const {
   requireSignin,
   adminMiddleware
 } = require("../controllers/auth");
-const { create, listOrders } = require("../controllers/order");
+const {
+  create,
+  listOrders,
+  getOrderStatus,
+  updateOrderStatus
+} = require("../controllers/order");
 const { decreaseQuantity } = require("../controllers/product");
 
 router.post(
@@ -18,5 +23,7 @@ router.post(
 );
 
 router.get("/order/list", requireSignin, adminMiddleware, listOrders);
+router.get("/order/status", requireSignin, adminMiddleware, getOrderStatus);
+router.put("/order/status", requireSignin, adminMiddleware, updateOrderStatus);
 
 module.exports = router;

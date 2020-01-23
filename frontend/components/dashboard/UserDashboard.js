@@ -1,5 +1,5 @@
-import Private from "../auth/Private";
 import Link from "next/link";
+import Private from "../auth/Private";
 
 const Dashboard = props => {
   const userLinks = () => {
@@ -13,7 +13,7 @@ const Dashboard = props => {
             </Link>
           </li>
           <li className='list-group-item'>
-            <Link href='/profile/update'>
+            <Link href={`/user`}>
               <a>Update profile</a>
             </Link>
           </li>
@@ -22,7 +22,7 @@ const Dashboard = props => {
     );
   };
 
-  const userInfo = () => {
+  const userInfo = token => {
     return (
       <section className='card mb-5 shadow-sm'>
         <h3 className='card-header'>User Information</h3>
@@ -39,11 +39,6 @@ const Dashboard = props => {
     return (
       <section className='card mb-5 shadow-sm'>
         <h3 className='card-header'>Orders History</h3>
-        <ul className='list-group list-group-flush'>
-          <li className='list-group-item'>Previous order</li>
-          <li className='list-group-item'>Previous order</li>
-          <li className='list-group-item'>Previous order</li>
-        </ul>
       </section>
     );
   };

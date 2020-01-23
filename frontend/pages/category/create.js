@@ -11,7 +11,7 @@ const createCategory = () => {
             <div className='col-md-12 pt-5 pb-5'>
               <h2>Manage Categories</h2>
             </div>
-            <div className='col-md-6'>
+            <div className='col-md-12'>
               <Category />
             </div>
           </div>

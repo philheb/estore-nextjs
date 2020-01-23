@@ -6,7 +6,9 @@ const OrderItemSchema = new mongoose.Schema(
     product: { type: ObjectId, ref: "Product" },
     title: String,
     price: Number,
-    count: Number
+    count: Number,
+    imageUrl: String,
+    slug: String
   },
   { timestamps: true }
 );

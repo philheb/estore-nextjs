@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { getCookie } from "../../actions/auth";
-import { createProduct } from "../../actions/product";
+import { updateProduct } from "../../actions/product";
 import { getCategories } from "../../actions/category";
+import Router from "next/router";
 
-const CreateProduct = () => {
+const UpdateProduct = ({ product }) => {
   const [values, setValues] = useState({
-    title: "",
-    description: "",
-    price: "",
-    imageUrl: "",
-    category: "",
-    quantity: "",
-    shipping: "",
+    title: product.title,
+    description: product.description,
+    price: product.price,
+    imageUrl: product.imageUrl,
+    category: product.category,
+    quantity: product.quantity,
+    shipping: product.shipping,
     isLoading: false,
     loadingPicture: false,
     error: "",
@@ -101,14 +102,6 @@ const CreateProduct = () => {
     }
   };
 
-  const checkedShippingHandler = e => {
-    if (shipping === false) {
-      setValues({ ...values, error: "", shipping: true });
-    } else {
-      setValues({ ...values, error: "", shipping: false });
-    }
-  };
-
   const submitHandler = e => {
     e.preventDefault();
     setValues({ ...values, error: "", isLoading: true });
@@ -121,21 +114,20 @@ const CreateProduct = () => {
       quantity,
       shipping
     };
-    createProduct(newProduct, token).then(data => {
+    updateProduct(product.slug, token, newProduct).then(data => {
       if (data.error) {
         setValues({ ...values, isLoading: false, error: data.error });
       } else {
         setValues({
           ...values,
-          title: "",
-          description: "",
-          price: "",
-          imageUrl: "",
-          category: "",
-          quantity: "",
-          shipping: "",
           isLoading: false,
-          success: `${data.title} as been successfully created.`
+          success: `${data.title} as been successfully updated.`
+        });
+        Router.push({
+          pathname: "/product/manage",
+          query: {
+            message: `${data.title.toUpperCase()} as been successfully updated.`
+          }
         });
       }
     });
@@ -279,7 +271,7 @@ const CreateProduct = () => {
                 <span className='sr-only'>Loading...</span>
               </div>
             ) : (
-              "Submit"
+              "Update"
             )}
           </button>
         </div>
@@ -290,4 +282,4 @@ const CreateProduct = () => {
   return <div>{newProductForm()}</div>;
 };
 
-export default CreateProduct;
+export default UpdateProduct;

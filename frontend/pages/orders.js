@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
-import { listOrders } from "../actions/order";
+import { listOrders, getStatus, updateStatus } from "../actions/order";
 import { getCookie } from "../actions/auth";
 import Layout from "../components/Layout";
 import Admin from "../components/auth/Admin";
-import OrderCart from "../components/order/OrderCart";
+import OrderCard from "../components/order/OrderCard";
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
+  const [status, setStatus] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const token = getCookie("token");
 
   useEffect(() => {
     loadOrders();
+    loadStatus();
   }, []);
 
   const loadOrders = () => {
@@ -28,22 +30,47 @@ const Order = () => {
     });
   };
 
+  const loadStatus = () => {
+    setIsLoading(true);
+    getStatus(token).then(data => {
+      if (data.error) {
+        console.log(error);
+        setIsLoading(false);
+      } else {
+        setStatus(data);
+        setIsLoading(false);
+      }
+    });
+  };
+
+  const updateOrderStatus = (orderId, status) => {
+    updateStatus(token, orderId, status);
+  };
+
   const showOrders = () => {
     if (orders && orders.length > 0) {
       return orders.map((order, index) => {
-        return <OrderCart key={index} order={order} />;
+        return (
+          <OrderCard
+            key={index}
+            order={order}
+            status={status}
+            updateOrderStatus={(orderId, status) =>
+              updateOrderStatus(orderId, status)
+            }
+          />
+        );
       });
     } else {
       return <h1>No orders</h1>;
     }
   };
 
-  console.log(orders);
-
   return (
     <Admin>
       <Layout>
         <main className='container'>
+          <h2>There is {orders.length} orders.</h2>
           <div>{showOrders()}</div>
         </main>
       </Layout>

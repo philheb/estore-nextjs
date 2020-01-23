@@ -122,8 +122,9 @@ const Category = () => {
       <div className='form-group'>
         <label className='text-muted'>Name</label>
         <input
-          type='text'
           className='form-control'
+          style={{ maxWidth: "400px" }}
+          type='text'
           onChange={changeHandler}
           value={name}
           required

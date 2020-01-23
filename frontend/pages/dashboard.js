@@ -6,6 +6,7 @@ import { isAuth } from "../actions/auth";
 
 const Dashboard = () => {
   const [values, setValues] = useState({
+    id: "",
     name: "",
     email: "",
     role: "",
@@ -18,6 +19,7 @@ const Dashboard = () => {
     const user = isAuth();
     setValues({
       ...values,
+      id: user._id,
       name: user.name,
       email: user.email,
       role: user.role === 1 ? "Administrator" : "Registered User",

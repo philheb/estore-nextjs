@@ -30,6 +30,7 @@
     "react-image-magnifiers": "^1.2.2",
     "react-image-magnify": "^2.7.4",
     "react-render-html": "^0.6.0",
+    "react-star-rating-component": "^1.4.1",
     "reactstrap": "^8.2.0"
   }
 }

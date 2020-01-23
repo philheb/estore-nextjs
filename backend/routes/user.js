@@ -1,19 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { requireSignin, authMiddleware } = require("../controllers/auth");
-const { read, update } = require("../controllers/user");
+const { read, update, history } = require("../controllers/user");
 
-//Validation
+router.get("/user", requireSignin, authMiddleware, read);
+router.put("/user", requireSignin, authMiddleware, update);
 
-router.get("/private/:userId", requireSignin, authMiddleware, (req, res) => {
-  res.json({
-    user: req.profile
-  });
-});
-
-router.get("/user/profile", requireSignin, authMiddleware, read);
-router.put("/user/profile", requireSignin, authMiddleware, update);
-
-// router.param("userId", userById);
+router.get("/user/history", requireSignin, authMiddleware, history);
 
 module.exports = router;

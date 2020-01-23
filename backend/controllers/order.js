@@ -1,4 +1,4 @@
-const { Order, CartItem } = require("../models/order");
+const { Order } = require("../models/order");
 const User = require("../models/user");
 const Product = require("../models/product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
@@ -12,11 +12,13 @@ exports.create = (req, res) => {
   req.body.order.products.forEach(item => {
     products.push({
       _id: item._id,
+      slug: item.slug,
       title: item.title,
       description: item.description,
       price: item.price,
       category: item.category,
-      quantity: item.count
+      quantity: item.count,
+      imageUrl: item.imageUrl
     });
   });
 
@@ -66,4 +68,24 @@ exports.listOrders = (req, res) => {
       console.log(orders);
       res.json(orders);
     });
+};
+exports.getOrderStatus = (req, res) => {
+  res.json(Order.schema.path("status").enumValues);
+};
+
+exports.updateOrderStatus = (req, res) => {
+  const { orderId, status } = req.body;
+
+  Order.findOneAndUpdate(
+    { _id: orderId },
+    { $set: { status: status } },
+    (error, order) => {
+      if (error) {
+        return res.status(400).json({
+          error: error
+        });
+      }
+      res.json(order.status);
+    }
+  );
 };

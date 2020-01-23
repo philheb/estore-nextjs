@@ -39,3 +39,40 @@ export const listOrders = token => {
       console.log(err);
     });
 };
+
+export const getStatus = token => {
+  return fetch(`${API}/order/status`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      handleResponse(res);
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const updateStatus = (token, orderId, status) => {
+  return fetch(`${API}/order/status`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ orderId, status })
+  })
+    .then(res => {
+      handleResponse(res);
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};

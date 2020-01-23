@@ -28,9 +28,7 @@ router.post(
   authMiddleware,
   create
 );
-
 router.get("/product/:slug", read);
-
 router.delete(
   "/product/:slug",
   requireSignin,
@@ -38,7 +36,6 @@ router.delete(
   canUpdateAndDeleteProduct,
   remove
 );
-
 router.put(
   "/product/:slug",
   requireSignin,
@@ -46,7 +43,6 @@ router.put(
   canUpdateAndDeleteProduct,
   update
 );
-
 router.get("/products", list);
 router.post("/products/related", listRelated);
 router.get("/products/categories", listCategories);
