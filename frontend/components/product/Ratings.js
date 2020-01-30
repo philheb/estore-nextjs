@@ -16,6 +16,7 @@ const Ratings = () => {
         value={rating}
         onStarClick={onStarClick}
       />
+      {rating}
     </div>
   );
 };

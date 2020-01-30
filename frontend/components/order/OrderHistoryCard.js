@@ -70,6 +70,17 @@ const OrderHistoryCard = ({ order }) => {
             </div>
           );
         })}
+        <div className=''>
+          <small>
+            Shipped to:
+            <br />
+            {`${order.address.firstName} ${order.address.lastName}`},{" "}
+            {order.address.address1},{" "}
+            {order.address.address2 ? order.address.address2 : " "}
+            {order.address.city}, {order.address.province},{" "}
+            {order.address.postalCode}
+          </small>
+        </div>
       </div>
     </div>
   );

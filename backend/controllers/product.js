@@ -1,4 +1,6 @@
 const Product = require("../models/product");
+const Order = require("../models/order");
+const User = require("../models/user");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 const slugify = require("slugify");
 
@@ -238,4 +240,55 @@ exports.decreaseQuantity = (req, res, next) => {
     }
     next();
   });
+};
+
+exports.newRating = (req, res) => {
+  //check if user already rate the product.
+  //check if user bought the product.
+  const userId = req.profile._id;
+  const { productId, rating } = req.body;
+  User.findOne({ _id: userId }).exec((err, data) => {
+    if (err) {
+      return res.status(400).json({
+        error: err
+      });
+    }
+    let result = [];
+    data.history.map(order =>
+      order.products.map(product => {
+        if (product._id === productId) {
+          result.push(1);
+        }
+      })
+    );
+    if (result.length > 0) {
+      Product.findOneAndUpdate(
+        { _id: productId },
+        { $push: { ratings: parseInt(rating) } },
+        { new: true }
+      ).exec((err, data) => {
+        if (err) {
+          return res.status(400).json({
+            error: err
+          });
+        }
+        data.averageRating =
+          data.ratings.reduce((p, c) => p + c, 0) / data.ratings.length;
+        const product = new Product(data);
+        console.log(product);
+        product.save((err, data) => {
+          if (err) {
+            return res.status(400).json({
+              error: errorHandler(err)
+            });
+          }
+          res.json(data);
+        });
+      });
+    }
+  });
+
+  //+1 to the reviews number
+
+  //calculate to average rating
 };

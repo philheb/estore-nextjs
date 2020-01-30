@@ -26,7 +26,6 @@ const OrderCard = ({ order, status, updateOrderStatus }) => {
         onChange={handleStatusChange}
         value={orderStatus}
       >
-        <option>Update status</option>
         {status.map((status, index) => {
           return (
             <option key={index} value={status}>

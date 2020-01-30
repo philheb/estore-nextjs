@@ -8,7 +8,8 @@ const {
   list,
   listRelated,
   listCategories,
-  listSearch
+  listSearch,
+  newRating
 } = require("../controllers/product");
 const {
   requireSignin,
@@ -48,5 +49,7 @@ router.post("/products/related", listRelated);
 router.get("/products/categories", listCategories);
 
 router.get("/products/search", listSearch);
+
+router.post("/products/review", requireSignin, authMiddleware, newRating);
 
 module.exports = router;
