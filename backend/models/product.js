@@ -45,12 +45,14 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    ratings: {
-      type: Array,
-      default: []
+    rateCount: {
+      type: Number,
+      default: 0
     },
-    averageRating: {
-      type: Number
+    rateValue: { type: Number },
+    rateAverage: {
+      type: Number,
+      default: 0
     },
     createdBy: { type: ObjectId, ref: "User", required: true }
   },
