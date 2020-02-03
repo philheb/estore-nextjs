@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Layout from "../../../components/Layout";
-import Private from "../../../components/auth/Private";
-import { getUser } from "../../../actions/user";
-import { getCookie } from "../../../actions/auth";
+import Layout from "../../components/Layout";
+import Private from "../../components/auth/Private";
+import { getUser } from "../../actions/user";
+import { getCookie } from "../../actions/auth";
 
 const User = () => {
   const token = getCookie("token");
