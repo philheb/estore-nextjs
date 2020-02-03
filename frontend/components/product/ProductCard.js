@@ -6,8 +6,6 @@ import Router from "next/router";
 
 const ProductCard = props => {
   const { product } = props;
-  product.rating = "25%";
-  product.reviews = "100";
 
   const addToCart = () => {
     addItem(product);

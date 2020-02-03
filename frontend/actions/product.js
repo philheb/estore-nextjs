@@ -132,3 +132,49 @@ export const updateProduct = (slug, token, product) => {
       console.log(err);
     });
 };
+
+export const getUserRating = (productId, token) => {
+  return fetch(`${API}/rating/user/${productId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const getAverageRating = productId => {
+  return fetch(`${API}/product/rating/${productId}`, {
+    method: "GET"
+  })
+    .then(res => {
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const rateProduct = (productId, rateValue, token) => {
+  return fetch(`${API}/rating`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ productId, rateValue })
+  })
+    .then(res => {
+      handleResponse(res);
+      return res.json();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};

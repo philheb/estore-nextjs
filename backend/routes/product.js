@@ -8,7 +8,8 @@ const {
   list,
   listRelated,
   listCategories,
-  listSearch
+  listSearch,
+  getAverageRating
 } = require("../controllers/product");
 const {
   requireSignin,
@@ -48,5 +49,6 @@ router.post("/products/related", listRelated);
 router.get("/products/categories", listCategories);
 
 router.get("/products/search", listSearch);
+router.get("/product/rating/:productId", getAverageRating);
 
 module.exports = router;

@@ -241,3 +241,12 @@ exports.decreaseQuantity = (req, res, next) => {
     next();
   });
 };
+
+exports.getAverageRating = (req, res) => {
+  Product.findOne({ _id: req.params.productId }).exec((err, product) => {
+    if (err) {
+      console.log(err);
+    }
+    res.json(product.rateAverage);
+  });
+};

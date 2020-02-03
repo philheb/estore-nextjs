@@ -39,6 +39,13 @@ const Dashboard = props => {
     return (
       <section className='card mb-5 shadow-sm'>
         <h3 className='card-header'>Orders History</h3>
+        <ul className='list-group list-group-flush'>
+          <li className='list-group-item'>
+            <Link href='/user/history'>
+              <a>Previous Orders</a>
+            </Link>
+          </li>
+        </ul>
       </section>
     );
   };

@@ -145,7 +145,7 @@ const Header = props => {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    onClick={() => signout(() => Router.replace("/"))}
+                    onClick={() => signout(() => Router.reload("/"))}
                     className='mr-4'
                     style={{ cursor: "pointer" }}
                   >

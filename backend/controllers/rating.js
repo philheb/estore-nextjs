@@ -59,3 +59,19 @@ exports.rate = (req, res) => {
     }
   });
 };
+
+exports.getUserRating = (req, res) => {
+  Rating.findOne({
+    userId: req.profile._id,
+    productId: req.params.productId
+  }).exec((err, rate) => {
+    if (err) {
+      return res.status(400).json({
+        error: errorHandler(err)
+      });
+    }
+    if (rate) {
+      res.json(rate.rateValue);
+    }
+  });
+};
