@@ -4,7 +4,7 @@ import Router from "next/router";
 import Layout from "../components/Layout";
 import { isAuth } from "../actions/auth";
 import { getCart } from "../actions/cart";
-import CartCard from "../components/cart/cartCard";
+import CartCard from "../components/cart/CartCard";
 import { IoMdCart } from "react-icons/io";
 import { getCookie } from "../actions/auth";
 
